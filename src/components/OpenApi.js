@@ -11,7 +11,7 @@ const OpenApi = () => {
     const fetchData = async () => {
       try {
         // Open API 호출
-        const response = await axios.get('https://www.culture.go.kr/data/openapi/getSwagger.do?openApiId=8b7f38bc-c668-4453-bf38-bcc6681453a4');
+        const response = await axios.get('http://api.kcisa.kr/openapi/API_TOU_052/request?serviceKey=8b023383-2375-4dd2-a484-a4ad2cbcecb2&numOfRows=10&pageNo=1');
         setData(response.data);  // 데이터 설정
       } catch (err) {
         setError(err);  // 에러 발생 시 에러 상태 설정
