@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // useNavigate 사용
+import { useNavigate } from 'react-router-dom';
 import './Home.css';
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const navigate = useNavigate(); // 라우터를 통해 페이지 이동
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
@@ -12,7 +12,7 @@ const Home = () => {
 
   const handleSearch = () => {
     if (searchQuery) {
-      navigate(`/show/${searchQuery}`); // 검색어를 포함해 Show.js로 이동
+      navigate(`/search/${searchQuery}`); // 검색어를 포함해 Search.js로 이동
     }
   };
 
@@ -20,7 +20,7 @@ const Home = () => {
     <div className="home-container">
       <div className="header">
         <button
-          onClick={() => navigate('/show')} // 쿼리 없이 Show.js로 이동
+          onClick={() => navigate('/list')} // 쿼리 없이 List.js로 이동
           className="navigate-button"
         >
           Go to Show
