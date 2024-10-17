@@ -12,15 +12,15 @@ const Home = () => {
 
   const handleSearch = () => {
     if (searchQuery) {
-      navigate(`/search/${searchQuery}`); // 검색어를 포함해 Show.js로 이동
+      navigate(`/show/${searchQuery}`); // 검색어를 포함해 Show.js로 이동
     }
   };
 
   return (
     <div className="home-container">
       <div className="header">
-        <button 
-          onClick={() => navigate('/show')} // Show.js로 이동
+        <button
+          onClick={() => navigate('/show')} // 쿼리 없이 Show.js로 이동
           className="navigate-button"
         >
           Go to Show
