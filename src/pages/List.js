@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './List.css'; // CSS 파일을 임포트합니다.
 
 const List = () => {
   const [data, setData] = useState([]);
@@ -25,33 +26,24 @@ const List = () => {
   }, []); // 컴포넌트가 처음 렌더링될 때만 호출
 
   // 로딩 중이면 로딩 메시지 출력
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="loading">Loading...</div>;
 
   // 에러 발생 시 에러 메시지 출력
-  if (error) return <div>Error: {error.message}</div>;
+  if (error) return <div className="error">Error: {error.message}</div>;
 
   return (
-    <div>
+    <div className="list-container">
       <h1>맛집 리스트</h1>
       {data.length > 0 ? (
-        <table>
-          <thead>
-            <tr>
-              <th>맛집 이름</th>
-              <th>주소</th>
-              <th>전화번호</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item, index) => (
-              <tr key={index}>
-                <td>{item.title}</td> {/* 맛집 이름 */}
-                <td>{item.address}</td> {/* 주소 */}
-                <td>{item.tel}</td> {/* 전화번호 */}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="card-container">
+          {data.map((item, index) => (
+            <div className="card" key={index}>
+              <h2>{item.title}</h2> {/* 맛집 이름 */}
+              <p><strong>주소:</strong> {item.address}</p> {/* 주소 */}
+              <p><strong>전화번호:</strong> {item.tel}</p> {/* 전화번호 */}
+            </div>
+          ))}
+        </div>
       ) : (
         <p>데이터가 없습니다.</p>
       )}

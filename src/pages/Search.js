@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import './Search.css'; // CSS 파일을 임포트합니다.
 
 const Search = () => {
   const { searchTerm } = useParams(); // URL에서 검색어 가져오기
@@ -27,10 +28,10 @@ const Search = () => {
   }, []); // 컴포넌트가 처음 렌더링될 때만 호출
 
   // 로딩 중이면 로딩 메시지 출력
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="loading">Loading...</div>;
 
   // 에러 발생 시 에러 메시지 출력
-  if (error) return <div>Error: {error.message}</div>;
+  if (error) return <div className="error">Error: {error.message}</div>;
 
   // 데이터 검색
   const filteredData = data.filter((item) =>
@@ -38,27 +39,18 @@ const Search = () => {
   ); // 검색어에 맞는 데이터 필터링
 
   return (
-    <div>
+    <div className="search-results">
       <h1>검색 결과</h1>
       {filteredData.length > 0 ? (
-        <table>
-          <thead>
-            <tr>
-              <th>맛집 이름</th>
-              <th>주소</th>
-              <th>전화번호</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData.map((item, index) => (
-              <tr key={index}>
-                <td>{item.title}</td> {/* 맛집 이름 */}
-                <td>{item.address}</td> {/* 주소 */}
-                <td>{item.tel}</td> {/* 전화번호 */}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="results-grid">
+          {filteredData.map((item, index) => (
+            <div className="result-card" key={index}>
+              <h2>{item.title}</h2> {/* 맛집 이름 */}
+              <p>주소: {item.address}</p> {/* 주소 */}
+              <p>전화번호: {item.tel}</p> {/* 전화번호 */}
+            </div>
+          ))}
+        </div>
       ) : (
         <p>검색 결과가 없습니다.</p>
       )}

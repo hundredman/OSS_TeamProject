@@ -1,0 +1,47 @@
+.list-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .loading,
+  .error {
+    text-align: center;
+    font-size: 18px;
+    color: #ff0000; /* 에러 메시지 색상 */
+  }
+  
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px; /* 카드 간 간격 */
+  }
+  
+  .card {
+    background-color: #ffffff; /* 카드 배경색 */
+    border: 1px solid #ddd; /* 카드 테두리 */
+    border-radius: 8px; /* 둥근 모서리 */
+    padding: 15px; /* 카드 내부 여백 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    transition: transform 0.2s; /* 호버 시 효과 */
+  }
+  
+  .card:hover {
+    transform: translateY(-5px); /* 호버 시 카드가 떠오르는 효과 */
+  }
+  
+  .card h2 {
+    font-size: 20px; /* 맛집 이름 크기 */
+    margin: 0 0 10px; /* 아래 여백 */
+  }
+  
+  .card p {
+    margin: 5px 0; /* 단락 여백 */
+    color: #555; /* 텍스트 색상 */
+  }
+  
