@@ -1,0 +1,40 @@
+.show-container {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.back-button, .gmail-button {
+  background-color: #f5f5f5;  /* 구글 버튼 스타일 */
+  border: 1px solid #ddd;  /* 테두리 색상 */
+  border-radius: 5px;  /* 모서리 둥글게 */
+  padding: 10px 15px;
+  cursor: pointer;
+  text-decoration: none;
+  color: #333;  /* 글자 색상 */
+}
+
+.back-button:hover, .gmail-button:hover {
+  background-color: #e0e0e0;  /* 호버 시 색상 변경 */
+}
+
+.email-item {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.email-title {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.email-snippet {
+  margin-top: 5px;
+}
