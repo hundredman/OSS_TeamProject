@@ -13,6 +13,14 @@ const Home = () => {
   const handleSearch = () => {
     if (searchQuery) {
       navigate(`/list?search=${encodeURIComponent(searchQuery)}`); // 검색어를 쿼리 파라미터로 전달
+    } else {
+      alert('검색어를 입력해주세요.');
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
     }
   };
 
@@ -25,6 +33,9 @@ const Home = () => {
         >
           List
         </button>
+        <button className="navigate-button" onClick={() => navigate('/favorite')}>
+          Favorite
+        </button>
       </div>
       <img
         src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
@@ -36,6 +47,7 @@ const Home = () => {
           type="text"
           value={searchQuery}
           onChange={handleInputChange}
+          onKeyPress={handleKeyPress} // Enter 키 입력 처리
           className="search-bar"
           placeholder="Search for a restaurant"
         />
