@@ -58,7 +58,7 @@ const List = () => {
         {/* 검색창 추가 */}
         <input
           type="text"
-          className="search-bar"
+          className="search-bar-list"
           placeholder="검색..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)} // 검색어 상태 업데이트
