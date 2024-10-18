@@ -1,47 +1,157 @@
-.list-container {
-    padding: 20px;
-    max-width: 1200px;
-    margin: auto;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+.layout {
+  display: flex;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #e0e0e0; /* 옅은 회색으로 수정 */
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sidebar-button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  text-align: center;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+}
+
+.large-button {
+  background-color: #c2e7ff; /* 음식점 추가 버튼 색상 변경 */
+  font-size: 18px;
+  width: 60%; /* 너비를 60%로 줄임 */
+}
+
+.large-button:hover {
+  /* hover 시 그림자 추가 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.small-button {
+  background-color: #e0e0e0; /* Go to List 버튼 색상 변경 */
+  font-size: 14px;
+}
+
+.small-button:hover {
+  background-color: #b0b0b0; /* hover 시 진한 회색으로 변경 */
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  margin: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: black;
+  text-align: center;
+}
+
+/* 검색창 스타일 */
+.search-bar {
+  width: 100%;
+  max-width: 600px;
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column; /* n*1 행렬 형태 */
+  gap: 16px;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  width: 95%;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card h2 {
+  font-size: 18px;
+  color: black;
+  margin: 0 0 10px 0;
+  flex-grow: 1;
+}
+
+.card p {
+  font-size: 14px;
+  color: black;
+  margin: 4px 0;
+  flex-grow: 1;
+}
+
+.card p strong {
+  color: #333;
+}
+
+.card-checkbox {
+  margin-right: 16px;
+  transform: scale(1.2); /* 체크박스 크기 조절 */
+}
+
+.loading,
+.error {
+  text-align: center;
+  font-size: 18px;
+  color: black;
+  padding: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
   }
   
-  h1 {
-    text-align: center;
+  .sidebar {
+    width: 100%;
     margin-bottom: 20px;
   }
-  
-  .loading,
-  .error {
-    text-align: center;
-    font-size: 18px;
-    color: #ff0000; /* 에러 메시지 색상 */
+
+  .main-content {
+    margin: 0;
   }
-  
+
   .card-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px; /* 카드 간 간격 */
+    flex-direction: column;
   }
-  
-  .card {
-    background-color: #ffffff; /* 카드 배경색 */
-    border: 1px solid #ddd; /* 카드 테두리 */
-    border-radius: 8px; /* 둥근 모서리 */
-    padding: 15px; /* 카드 내부 여백 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-    transition: transform 0.2s; /* 호버 시 효과 */
-  }
-  
-  .card:hover {
-    transform: translateY(-5px); /* 호버 시 카드가 떠오르는 효과 */
-  }
-  
-  .card h2 {
-    font-size: 20px; /* 맛집 이름 크기 */
-    margin: 0 0 10px; /* 아래 여백 */
-  }
-  
-  .card p {
-    margin: 5px 0; /* 단락 여백 */
-    color: #555; /* 텍스트 색상 */
-  }
-  
+}
