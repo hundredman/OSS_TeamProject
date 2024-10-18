@@ -12,7 +12,7 @@ const Home = () => {
 
   const handleSearch = () => {
     if (searchQuery) {
-      navigate(`/search/${searchQuery}`); // 검색어를 포함해 Search.js로 이동
+      navigate(`/list?search=${encodeURIComponent(searchQuery)}`); // 검색어를 쿼리 파라미터로 전달
     }
   };
 
@@ -23,7 +23,7 @@ const Home = () => {
           onClick={() => navigate('/list')} // 쿼리 없이 List.js로 이동
           className="navigate-button"
         >
-          Go to Show
+          List
         </button>
       </div>
       <img

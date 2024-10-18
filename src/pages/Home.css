@@ -28,6 +28,12 @@
     outline: none;
 }
 
+@media (max-width: 500px) {
+    .search-bar {
+      width: 200%;
+    }
+}
+
 .button-container {
     margin-top: 20px;
     display: flex;
