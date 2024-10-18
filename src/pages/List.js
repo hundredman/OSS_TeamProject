@@ -18,6 +18,11 @@ const List = ({ selectedItems, setSelectedItems }) => {
         const response = await axios.get(
           `http://api.kcisa.kr/openapi/API_TOU_052/request?serviceKey=8b023383-2375-4dd2-a484-a4ad2cbcecb2&numOfRows=150&pageNo=1`
         );
+        
+        // 기존 데이터를 MockAPI에 저장
+        await syncData(response.data.response.body.items.item);
+        
+        // 가져온 데이터를 상태에 설정
         setData(response.data.response.body.items.item);
       } catch (err) {
         setError(err);
@@ -28,6 +33,23 @@ const List = ({ selectedItems, setSelectedItems }) => {
 
     fetchData();
   }, []);
+
+  // 데이터 MockAPI에 저장하는 함수
+  const syncData = async (items) => {
+    try {
+      await Promise.all(items.map(item => 
+        axios.post('https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants', {
+          title: item.title,
+          address: item.address,
+          tel: item.tel,
+        })
+      ));
+      alert('데이터가 MockAPI에 성공적으로 추가되었습니다.');
+    } catch (err) {
+      alert('데이터 추가 중 오류가 발생했습니다.');
+      console.error(err);
+    }
+  };
 
   // 체크박스 선택 처리
   const handleCheckboxChange = (item) => {
