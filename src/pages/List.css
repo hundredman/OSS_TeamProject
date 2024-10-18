@@ -7,12 +7,13 @@ body {
 
 .layout {
   display: flex;
+  min-height: 100vh; /* 전체 화면 높이를 채우도록 설정 */
 }
 
 .sidebar {
   width: 250px;
   background-color: #e0e0e0; /* 옅은 회색으로 수정 */
-  color: white;
+  color: black; /* 텍스트 색상 변경 */
   padding: 20px;
   display: flex;
   flex-direction: column;
