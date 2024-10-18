@@ -1,0 +1,93 @@
+/* 기존 스타일 재사용 */
+.layout {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  .sidebar {
+    width: 250px;
+    background-color: #e0e0e0;
+    color: black;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .sidebar-button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+  }
+  
+  .home-button {
+    background-color: #ffcccb; /* 홈 버튼 색상 */
+  }
+  
+  .small-button {
+    background-color: #add8e6; /* 리스트 버튼 색상 */
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    margin: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .card {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    width: 95%;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .card h2 {
+    font-size: 18px;
+    color: black;
+    margin: 0 0 10px 0;
+    flex-grow: 1;
+  }
+  
+  .card p {
+    font-size: 14px;
+    color: black;
+  }
+  
+  .card p strong {
+    color: #333;
+  }
+  
+  .delete-button {
+    background-color: #ff6666;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .delete-button:hover {
+    background-color: #ff3333;
+  }
+  

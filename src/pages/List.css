@@ -1,3 +1,4 @@
+/* List.css */
 body {
   font-family: Arial, sans-serif;
   background-color: #f5f5f5;
@@ -7,13 +8,13 @@ body {
 
 .layout {
   display: flex;
-  min-height: 100vh; /* 전체 화면 높이를 채우도록 설정 */
+  min-height: 100vh;
 }
 
 .sidebar {
   width: 250px;
-  background-color: #e0e0e0; /* 옅은 회색으로 수정 */
-  color: black; /* 텍스트 색상 변경 */
+  background-color: #e0e0e0;
+  color: black;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -33,26 +34,6 @@ body {
   color: black;
 }
 
-.large-button {
-  background-color: #c2e7ff; /* 음식점 추가 버튼 색상 변경 */
-  font-size: 18px;
-  width: 60%; /* 너비를 60%로 줄임 */
-}
-
-.large-button:hover {
-  /* hover 시 그림자 추가 */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.small-button {
-  background-color: #e0e0e0; /* Go to List 버튼 색상 변경 */
-  font-size: 14px;
-}
-
-.small-button:hover {
-  background-color: #b0b0b0; /* hover 시 진한 회색으로 변경 */
-}
-
 .main-content {
   flex-grow: 1;
   padding: 20px;
@@ -62,97 +43,48 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: black;
-  text-align: center;
+.search-add-container {
+  display: flex;
+  justify-content: space-between;
 }
 
-/* 검색창 스타일 */
+.add-to-favorite-button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-to-favorite-button:hover {
+  background-color: #0056b3;
+}
+
 .search-bar-list {
   width: 100%;
   max-width: 600px;
   padding: 10px;
-  margin-bottom: 20px;
   font-size: 16px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .card-container {
   display: flex;
-  flex-direction: column; /* n*1 행렬 형태 */
+  flex-direction: column;
   gap: 16px;
 }
 
-.card {
-  display: flex;
-  align-items: center;
-  background-color: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  width: 95%;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
+.delete-button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-.card:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.card h2 {
-  font-size: 18px;
-  color: black;
-  margin: 0 0 10px 0;
-  flex-grow: 1;
-}
-
-.card p {
-  font-size: 14px;
-  color: black;
-  margin: 4px 0;
-  flex-grow: 1;
-}
-
-.card p strong {
-  color: #333;
-}
-
-.card-checkbox {
-  margin-right: 16px;
-  transform: scale(1.2); /* 체크박스 크기 조절 */
-}
-
-.loading,
-.error {
-  text-align: center;
-  font-size: 18px;
-  color: black;
-  padding: 20px;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .layout {
-    flex-direction: column;
-  }
-  
-  .sidebar {
-    width: 100%;
-    margin-bottom: 20px;
-  }
-
-  .main-content {
-    margin: 0;
-  }
-
-  .card-container {
-    flex-direction: column;
-  }
+.delete-button:hover {
+  background-color: darkred;
 }
