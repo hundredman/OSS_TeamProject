@@ -128,7 +128,7 @@ const List = ({ selectedItems, setSelectedItems }) => {
   return (
     <div className="layout">
       <div className="sidebar">
-        <Link to="/" className="sidebar-button home-button">Main Page</Link>
+        <Link to="/" className="sidebar-button home-button">Home Page</Link>
         <Link to="/favorite" className="sidebar-button small-button">Favorite</Link>
         <Link to="/create" className="sidebar-button large-button">음식점 추가</Link>
       </div>
