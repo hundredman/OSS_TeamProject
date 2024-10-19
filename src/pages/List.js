@@ -101,19 +101,21 @@ const List = ({ selectedItems, setSelectedItems }) => {
       try {
         const favoritesResponse = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites');
         const existingFavorites = favoritesResponse.data;
-
-        const hasDuplicates = selectedItems.some(item =>
-          existingFavorites.some(favorite =>
+  
+        // 중복 확인을 위한 변수를 생성
+        const newFavorites = selectedItems.filter(item =>
+          !existingFavorites.some(favorite =>
             favorite.title === item.title && favorite.address === item.address
           )
         );
-
-        if (hasDuplicates) {
-          alert('선택한 목록에 이미 즐겨찾기에 추가된 맛집이 있습니다. 추가할 수 없습니다.');
+  
+        // 새로 추가할 맛집이 없으면 경고 메시지 표시
+        if (newFavorites.length === 0) {
+          alert('선택한 맛집이 모두 이미 즐겨찾기에 추가되어 있습니다.');
           return;
         }
-
-        await Promise.all(selectedItems.map(async (item) => {
+  
+        await Promise.all(newFavorites.map(async (item) => {
           await axios.post('https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites', {
             title: item.title,
             address: item.address,
@@ -124,7 +126,7 @@ const List = ({ selectedItems, setSelectedItems }) => {
             operatingTime: item.operatingTime
           });
         }));
-
+  
         alert('선택한 맛집이 즐겨찾기에 추가되었습니다.');
       } catch (err) {
         console.error(err);
@@ -132,7 +134,7 @@ const List = ({ selectedItems, setSelectedItems }) => {
     } else {
       alert('선택된 맛집이 없습니다.');
     }
-  };
+  };  
 
   const handlePageChange = (direction) => {
     setCurrentPage(prevPage => {
