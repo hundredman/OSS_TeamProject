@@ -2,7 +2,6 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
 import './Create.css';
 
 const Create = () => {
@@ -40,90 +39,77 @@ const Create = () => {
   };
 
   return (
-    <div className="layout">
-      <div className="sidebar">
-        <Link to="/" className="sidebar-button home-button">Main Page</Link>
-        <Link to="/list" className="sidebar-button small-button">Go to List</Link>
-      </div>
+    <div className="edit-container">
+      <form className="edit-form" onSubmit={handleSubmit(onSubmit)}>
+        <div className="edit-title">
+          <h1 className="edit-title">새로운 맛집 추가</h1>
+        </div>
 
-      <div className="main-content">
-        <h1>맛집 추가</h1>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <Form.Group controlId="formTitle">
-            <Form.Label>맛집 이름</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="맛집 이름을 입력하세요."
-              {...register('title', { required: '맛집 이름은 필수입니다.' })}
-            />
-            {errors.title && <p className="error">{errors.title.message}</p>}
-          </Form.Group>
+        <label className="edit-label" htmlFor="title">음식점 이름</label>
+        <input
+          className="edit-input"
+          type="text"
+          id="title"
+          {...register('title', { required: true })}
+        />
+        {errors.title && <p className="error-message">음식점 이름을 입력해주세요.</p>}
 
-          <Form.Group controlId="formAddress">
-            <Form.Label>주소</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="주소를 입력하세요."
-              {...register('address', { required: '주소는 필수입니다.' })}
-            />
-            {errors.address && <p className="error">{errors.address.message}</p>}
-          </Form.Group>
+        <label className="edit-label" htmlFor="category2">나라</label>
+        <input
+          className="edit-input"
+          type="text"
+          id="category2"
+          {...register('category2', { required: true })}
+        />
+        {errors.category2 && <p className="error-message">나라를 입력해주세요.</p>}
 
-          <Form.Group controlId="formTel">
-            <Form.Label>전화번호</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="전화번호를 입력하세요."
-              {...register('tel', { required: '전화번호는 필수입니다.' })}
-            />
-            {errors.tel && <p className="error">{errors.tel.message}</p>}
-          </Form.Group>
+        <label className="edit-label" htmlFor="tel">전화번호</label>
+        <input
+          className="edit-input"
+          type="text"
+          id="tel"
+          {...register('tel', { required: true })}
+        />
+        {errors.tel && <p className="error-message">전화번호를 입력해주세요.</p>}
 
-          <Form.Group controlId="formCategory2">
-            <Form.Label>나라</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="나라를 입력하세요."
-              {...register('category2', { required: '카테고리는 필수입니다.' })}
-            />
-            {errors.category2 && <p className="error">{errors.category2.message}</p>}
-          </Form.Group>
+        <label className="edit-label" htmlFor="address">주소</label>
+        <input
+          className="edit-input"
+          type="text"
+          id="address"
+          {...register('address', { required: true })}
+        />
+        {errors.address && <p className="error-message">주소를 입력해주세요.</p>}
 
-          <Form.Group controlId="formCategory3">
-            <Form.Label>Category3</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Category3를 입력하세요."
-              {...register('category3', { required: '카테고리는 필수입니다.' })}
-            />
-            {errors.category3 && <p className="error">{errors.category3.message}</p>}
-          </Form.Group>
+        <label className="edit-label" htmlFor="information">정보</label>
+        <input
+          className="edit-input"
+          type="text"
+          id="information"
+          {...register('information', { required: true })}
+        />
+        {errors.information && <p className="error-message">정보를 입력해주세요.</p>}
 
-          <Form.Group controlId="formInformation">
-            <Form.Label>정보</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="정보를 입력하세요."
-              {...register('information', { required: '정보는 필수입니다.' })}
-            />
-            {errors.information && <p className="error">{errors.information.message}</p>}
-          </Form.Group>
+        <label className="edit-label" htmlFor="operatingTime">운영시간</label>
+        <input
+          className="edit-input"
+          type="text"
+          id="operatingTime"
+          {...register('operatingTime', { required: true })}
+        />
+        {errors.operatingTime && <p className="error-message">운영시간을 입력해주세요.</p>}
 
-          <Form.Group controlId="formOperatingTime">
-            <Form.Label>운영시간</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="운영시간을 입력하세요."
-              {...register('operatingTime', { required: '운영시간은 필수입니다.' })}
-            />
-            {errors.operatingTime && <p className="error">{errors.operatingTime.message}</p>}
-          </Form.Group>
+        <label className="edit-label" htmlFor="coordinates">위치</label>
+        <input
+          className="edit-input"
+          type="text"
+          id="coordinates"
+          {...register('coordinates', { required: true })}
+        />
+        {errors.coordinates && <p className="error-message">위치를 입력해주세요.</p>}
 
-          <Button variant="primary" type="submit">
-            추가
-          </Button>
-        </Form>
-      </div>
+        <button type="submit" className="edit-submit-button">저장</button>
+      </form>
     </div>
   );
 };
