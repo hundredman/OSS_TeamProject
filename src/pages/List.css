@@ -145,3 +145,9 @@ body {
 .card-text {
   margin: 0;
 }
+
+.button-container {
+  display: flex;
+  justify-content: flex-end; /* 버튼을 오른쪽으로 정렬 */
+  gap: 10px; /* 버튼 간의 간격 */
+}

@@ -66,7 +66,7 @@ const List = ({ selectedItems, setSelectedItems }) => {
           title: item.title,
           category2: item.category2,
           tel: item.tel,
-          address: item.address,          
+          address: item.address,
           information: item.information,
           operatingTime: item.operatingTime,
           coordinates: item.coordinates
@@ -135,7 +135,7 @@ const List = ({ selectedItems, setSelectedItems }) => {
           title: item.title,
           category2: item.category2,
           tel: item.tel,
-          address: item.address,          
+          address: item.address,
           information: item.information,
           operatingTime: item.operatingTime,
           coordinates: item.coordinates
@@ -245,12 +245,14 @@ const List = ({ selectedItems, setSelectedItems }) => {
                         </Card.Text>
                       </div>
                     </div>
-                    <Button className="delete-button" onClick={(e) => { handleDeleteItem(item); }}>
-                      삭제
-                    </Button>
-                    <Button className="update-button" onClick={() => handleUpdateItem(item)}>
-                      수정
-                    </Button>
+                    <div className="button-container">
+                      <Button className="delete-button" onClick={(e) => { handleDeleteItem(item); }}>
+                        삭제
+                      </Button>
+                      <Button className="update-button" onClick={() => handleUpdateItem(item)}>
+                        수정
+                      </Button>
+                    </div>
                   </Card.Body>
                 </Card>
               </Col>
