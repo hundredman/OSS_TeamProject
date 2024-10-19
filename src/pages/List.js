@@ -64,8 +64,12 @@ const List = ({ selectedItems, setSelectedItems }) => {
       await Promise.all(filteredItems.map(item =>
         axios.post('https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants', {
           title: item.title,
-          address: item.address,
+          category2: item.category2,
           tel: item.tel,
+          address: item.address,          
+          information: item.information,
+          operatingTime: item.operatingTime,
+          coordinates: item.coordinates
         })
       ));
     } catch (err) {
@@ -108,38 +112,38 @@ const List = ({ selectedItems, setSelectedItems }) => {
       alert('선택된 맛집이 없습니다.');
       return;
     }
-  
+
     try {
       const favoritesResponse = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites');
       const existingFavorites = favoritesResponse.data;
-  
+
       // 중복 확인을 위한 변수를 생성
       const newFavorites = selectedItems.filter(item =>
         !existingFavorites.some(favorite =>
           favorite.title === item.title && favorite.address === item.address
         )
       );
-  
+
       // 새로 추가할 맛집이 없으면 경고 메시지 표시
       if (newFavorites.length === 0) {
         alert('선택한 맛집이 모두 이미 즐겨찾기에 추가되어 있습니다.');
         return;
       }
-  
+
       await Promise.all(newFavorites.map(async (item) => {
         await axios.post('https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites', {
           title: item.title,
-          address: item.address,
-          tel: item.tel,
           category2: item.category2,
-          category3: item.category3,
+          tel: item.tel,
+          address: item.address,          
           information: item.information,
-          operatingTime: item.operatingTime
+          operatingTime: item.operatingTime,
+          coordinates: item.coordinates
         });
       }));
-  
+
       alert('선택한 맛집이 즐겨찾기에 추가되었습니다.');
-  
+
       // 선택된 항목 리셋 (체크박스 해제)
       setSelectedItems([]);
     } catch (err) {
@@ -232,12 +236,12 @@ const List = ({ selectedItems, setSelectedItems }) => {
                       <div>
                         <Card.Title className="card-title">{item.title}</Card.Title>
                         <Card.Text className="card-text">
-                          <strong>주소:</strong> {item.address} <br />
-                          <strong>전화번호:</strong> {item.tel} <br />
-                          <strong>나라:</strong> {item.category2} <br />
-                          <strong>category3:</strong> {item.category3} <br />
-                          <strong>정보:</strong> {item.information} <br />
-                          <strong>운영시간:</strong> {item.operatingTime} <br />
+                          <p><strong>나라:</strong> {item.category2}</p>
+                          <p><strong>전화번호:</strong> {item.tel}</p>
+                          <p><strong>주소:</strong> {item.address}</p>
+                          <p><strong>정보:</strong> {item.information}</p>
+                          <p><strong>운영시간:</strong> {item.operatingTime}</p>
+                          <p><strong>좌표:</strong> {item.coordinates}</p>
                         </Card.Text>
                       </div>
                     </div>

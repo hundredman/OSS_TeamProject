@@ -57,8 +57,12 @@ const Favorite = ({ selectedItems, setSelectedItems }) => {
             {favorites.map((item, index) => (
               <div className="card" key={index}>
                 <h2>{item.title}</h2>
-                <p><strong>주소:</strong> {item.address}</p>
+                <p><strong>나라:</strong> {item.category2}</p>
                 <p><strong>전화번호:</strong> {item.tel}</p>
+                <p><strong>주소:</strong> {item.address}</p>
+                <p><strong>정보:</strong> {item.information}</p>
+                <p><strong>운영시간:</strong> {item.operatingTime}</p>
+                <p><strong>좌표:</strong> {item.coordinates}</p>
                 <button className="delete-button" onClick={() => handleDeleteItem(item)}>
                   삭제
                 </button>
