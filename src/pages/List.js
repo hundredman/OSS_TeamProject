@@ -72,11 +72,9 @@ const List = ({ selectedItems, setSelectedItems }) => {
   const handleAddToFavorites = async () => {
     if (selectedItems.length > 0) {
       try {
-        // 이미 즐겨찾기에 있는지 확인
         const favoritesResponse = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites');
         const existingFavorites = favoritesResponse.data;
   
-        // 체크된 항목 중에 이미 추가된 식당이 있는지 확인
         const hasDuplicates = selectedItems.some(item => 
           existingFavorites.some(favorite => 
             favorite.title === item.title && favorite.address === item.address
@@ -88,7 +86,6 @@ const List = ({ selectedItems, setSelectedItems }) => {
           return; // 중복이 있을 경우 추가하지 않음
         }
   
-        // 새로운 즐겨찾기 항목 추가
         await Promise.all(selectedItems.map(async (item) => {
           await axios.post('https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites', {
             title: item.title,
@@ -106,7 +103,6 @@ const List = ({ selectedItems, setSelectedItems }) => {
     }
   };
    
-
   const handlePageChange = (direction) => {
     setCurrentPage(prevPage => {
       if (direction === 'next') {
@@ -133,8 +129,8 @@ const List = ({ selectedItems, setSelectedItems }) => {
     <div className="layout">
       <div className="sidebar">
         <Link to="/" className="sidebar-button home-button">Main Page</Link>
-        <Link to="/create" className="sidebar-button large-button">음식점 추가</Link>
         <Link to="/favorite" className="sidebar-button small-button">Go to List</Link>
+        <Link to="/create" className="sidebar-button large-button">음식점 추가</Link>
       </div>
 
       <div className="main-content">
@@ -178,10 +174,10 @@ const List = ({ selectedItems, setSelectedItems }) => {
         <Row className="card-container" style={{ marginTop: '20px' }}>
           {currentItems.length > 0 ? (
             currentItems.map((item, index) => (
-              <Col key={index} md={12}> {/* 카드가 전체 너비를 차지하도록 설정 */}
-                <Card className="mb-3" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', height: '120px' }}> {/* 카드 내부 내용을 가로로 배치 */}
-                  <Card.Body style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
+              <Col key={index} md={12}>
+                <Card className="restaurant-card">
+                  <Card.Body className="card-body">
+                    <div className="card-content">
                       <input
                         type="checkbox"
                         className="card-checkbox"
@@ -189,8 +185,8 @@ const List = ({ selectedItems, setSelectedItems }) => {
                         checked={selectedItems.includes(item)}
                       />
                       <div>
-                        <Card.Title style={{ margin: 0 }}>{item.title}</Card.Title>
-                        <Card.Text style={{ margin: 0 }}>
+                        <Card.Title className="card-title">{item.title}</Card.Title>
+                        <Card.Text className="card-text">
                           <strong>주소:</strong> {item.address} <br />
                           <strong>전화번호:</strong> {item.tel}
                         </Card.Text>
