@@ -21,7 +21,7 @@ const List = ({ selectedItems, setSelectedItems }) => {
         // Mock API에 데이터가 없는 경우에만 새로운 데이터를 API에서 가져옴
         if (mockResponse.data.length === 0) {
           const response = await axios.get(
-            `http://api.kcisa.kr/openapi/API_TOU_052/request?serviceKey=8b023383-2375-4dd2-a484-a4ad2cbcecb2&numOfRows=30&pageNo=1`
+            `http://api.kcisa.kr/openapi/API_TOU_052/request?serviceKey=8b023383-2375-4dd2-a484-a4ad2cbcecb2&numOfRows=80&pageNo=1`
           );
   
           // 새로운 데이터를 가져온 후 Mock API에 동기화하고 바로 setData 처리
