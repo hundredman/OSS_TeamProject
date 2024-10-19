@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, Row, Col, Button } from 'react-bootstrap';
 import './List.css';
 
@@ -11,15 +11,16 @@ const List = ({ selectedItems, setSelectedItems }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const mockResponse = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants');
-        
+
         if (mockResponse.data.length === 0) {
           const response = await axios.get(
-            `http://api.kcisa.kr/openapi/API_TOU_052/request?serviceKey=8b023383-2375-4dd2-a484-a4ad2cbcecb2&numOfRows=150&pageNo=1`
+            `http://api.kcisa.kr/openapi/API_TOU_052/request?serviceKey=8b023383-2375-4dd2-a484-a4ad2cbcecb2&numOfRows=30&pageNo=1`
           );
           await syncData(response.data.response.body.items.item);
           const newMockResponse = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants');
@@ -43,7 +44,7 @@ const List = ({ selectedItems, setSelectedItems }) => {
 
   const syncData = async (items) => {
     try {
-      await Promise.all(items.map(item => 
+      await Promise.all(items.map(item =>
         axios.post('https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants', {
           title: item.title,
           address: item.address,
@@ -84,15 +85,15 @@ const List = ({ selectedItems, setSelectedItems }) => {
         const favoritesResponse = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites');
         const existingFavorites = favoritesResponse.data;
 
-        const hasDuplicates = selectedItems.some(item => 
-          existingFavorites.some(favorite => 
+        const hasDuplicates = selectedItems.some(item =>
+          existingFavorites.some(favorite =>
             favorite.title === item.title && favorite.address === item.address
           )
         );
 
         if (hasDuplicates) {
           alert('선택한 목록에 이미 즐겨찾기에 추가된 맛집이 있습니다. 추가할 수 없습니다.');
-          return; 
+          return;
         }
 
         await Promise.all(selectedItems.map(async (item) => {
@@ -100,6 +101,10 @@ const List = ({ selectedItems, setSelectedItems }) => {
             title: item.title,
             address: item.address,
             tel: item.tel,
+            category2: item.category2,
+            category3: item.category3,
+            information: item.information,
+            operatingTime: item.operatingTime
           });
         }));
 
@@ -130,6 +135,10 @@ const List = ({ selectedItems, setSelectedItems }) => {
   const filteredData = data.filter(item =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleCardClick = (id) => {
+    navigate(`/edit/${id}`);
+  }
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -185,7 +194,7 @@ const List = ({ selectedItems, setSelectedItems }) => {
           {currentItems.length > 0 ? (
             currentItems.map((item, index) => (
               <Col key={index} md={12}>
-                <Card className="restaurant-card">
+                <Card className="restaurant-card" onClick={() => handleCardClick(item.id)} style={{ cursor: 'pointer' }}> {/* 카드 클릭 시 Edit.js로 이동 */}
                   <Card.Body className="card-body">
                     <div className="card-content">
                       <input
@@ -193,16 +202,25 @@ const List = ({ selectedItems, setSelectedItems }) => {
                         className="card-checkbox"
                         onChange={() => handleCheckboxChange(item)}
                         checked={selectedItems.includes(item)}
+                        onClick={(e) => e.stopPropagation()} // 체크박스 클릭 시 카드 클릭 이벤트가 발생하지 않도록 설정
+
                       />
                       <div>
                         <Card.Title className="card-title">{item.title}</Card.Title>
                         <Card.Text className="card-text">
                           <strong>주소:</strong> {item.address} <br />
-                          <strong>전화번호:</strong> {item.tel}
+                          <strong>전화번호:</strong> {item.tel} <br />
+                          <strong>나라:</strong> {item.category2} <br />
+                          <strong>category3:</strong> {item.category3} <br />
+                          <strong>정보:</strong> {item.information} <br />
+                          <strong>운영시간:</strong> {item.operatingTime} <br />
                         </Card.Text>
                       </div>
                     </div>
-                    <Button className="delete-button" onClick={() => handleDeleteItem(item)}>
+                    <Button className="delete-button" onClick={(e) => {
+                      e.stopPropagation(); // 삭제 버튼 클릭 시 카드 클릭 이벤트가 발생하지 않도록 설정
+                      handleDeleteItem(item);
+                    }}>
                       삭제
                     </Button>
                   </Card.Body>
