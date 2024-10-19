@@ -25,10 +25,7 @@ const Favorite = ({ selectedItems, setSelectedItems }) => {
 
   const handleDeleteItem = async (item) => {
     try {
-      // Mock API에서 삭제 요청
       await axios.delete(`https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites/${item.id}`);
-
-      // 상태에서 해당 아이템 제거
       setFavorites(prevFavorites => prevFavorites.filter(favorite => favorite.id !== item.id));
       setSelectedItems(prevSelectedItems =>
         prevSelectedItems.filter(selected => selected.id !== item.id)
@@ -56,7 +53,7 @@ const Favorite = ({ selectedItems, setSelectedItems }) => {
       <div className="main-content">
         <h1>내가 선택한 맛집</h1>
         {favorites.length > 0 ? (
-          <div className="card-container">
+          <div className="container-favorite">
             {favorites.map((item, index) => (
               <div className="card" key={index}>
                 <h2>{item.title}</h2>

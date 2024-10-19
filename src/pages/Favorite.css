@@ -61,6 +61,12 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease;
   }
+
+  .container-favorite {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+  }
   
   .card h2 {
     font-size: 18px;
