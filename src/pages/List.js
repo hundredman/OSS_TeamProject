@@ -75,9 +75,11 @@ const List = ({ selectedItems, setSelectedItems }) => {
 
   const handleCheckboxChange = (item) => {
     setSelectedItems(prevSelectedItems => {
-      if (prevSelectedItems.includes(item)) {
-        return prevSelectedItems.filter(i => i !== item);
+      if (prevSelectedItems.some(i => i.id === item.id)) {
+        // 이미 선택된 항목이면 배열에서 제거
+        return prevSelectedItems.filter(i => i.id !== item.id);
       } else {
+        // 선택되지 않은 항목이면 배열에 추가
         return [...prevSelectedItems, item];
       }
     });
@@ -101,44 +103,49 @@ const List = ({ selectedItems, setSelectedItems }) => {
   };
 
   const handleAddToFavorites = async () => {
-    if (selectedItems.length > 0) {
-      try {
-        const favoritesResponse = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites');
-        const existingFavorites = favoritesResponse.data;
-  
-        // 중복 확인을 위한 변수를 생성
-        const newFavorites = selectedItems.filter(item =>
-          !existingFavorites.some(favorite =>
-            favorite.title === item.title && favorite.address === item.address
-          )
-        );
-  
-        // 새로 추가할 맛집이 없으면 경고 메시지 표시
-        if (newFavorites.length === 0) {
-          alert('선택한 맛집이 모두 이미 즐겨찾기에 추가되어 있습니다.');
-          return;
-        }
-  
-        await Promise.all(newFavorites.map(async (item) => {
-          await axios.post('https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites', {
-            title: item.title,
-            address: item.address,
-            tel: item.tel,
-            category2: item.category2,
-            category3: item.category3,
-            information: item.information,
-            operatingTime: item.operatingTime
-          });
-        }));
-  
-        alert('선택한 맛집이 즐겨찾기에 추가되었습니다.');
-      } catch (err) {
-        console.error(err);
-      }
-    } else {
+    // 선택된 항목이 없으면 아무 작업도 하지 않음
+    if (selectedItems.length === 0) {
       alert('선택된 맛집이 없습니다.');
+      return;
     }
-  };  
+  
+    try {
+      const favoritesResponse = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites');
+      const existingFavorites = favoritesResponse.data;
+  
+      // 중복 확인을 위한 변수를 생성
+      const newFavorites = selectedItems.filter(item =>
+        !existingFavorites.some(favorite =>
+          favorite.title === item.title && favorite.address === item.address
+        )
+      );
+  
+      // 새로 추가할 맛집이 없으면 경고 메시지 표시
+      if (newFavorites.length === 0) {
+        alert('선택한 맛집이 모두 이미 즐겨찾기에 추가되어 있습니다.');
+        return;
+      }
+  
+      await Promise.all(newFavorites.map(async (item) => {
+        await axios.post('https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites', {
+          title: item.title,
+          address: item.address,
+          tel: item.tel,
+          category2: item.category2,
+          category3: item.category3,
+          information: item.information,
+          operatingTime: item.operatingTime
+        });
+      }));
+  
+      alert('선택한 맛집이 즐겨찾기에 추가되었습니다.');
+  
+      // 선택된 항목 리셋 (체크박스 해제)
+      setSelectedItems([]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handlePageChange = (direction) => {
     setCurrentPage(prevPage => {
@@ -220,7 +227,7 @@ const List = ({ selectedItems, setSelectedItems }) => {
                         type="checkbox"
                         className="card-checkbox"
                         onChange={() => handleCheckboxChange(item)}
-                        checked={selectedItems.includes(item)}
+                        checked={selectedItems.some(i => i.id === item.id)}
                       />
                       <div>
                         <Card.Title className="card-title">{item.title}</Card.Title>
