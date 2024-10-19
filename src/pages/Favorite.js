@@ -1,18 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './Favorite.css'; // Favorite.css에 사이드바 스타일 추가
+import axios from 'axios';
+import './Favorite.css';
 
 const Favorite = ({ selectedItems, setSelectedItems }) => {
-  // 항목 삭제 핸들러
-  const handleDeleteItem = (item) => {
-    setSelectedItems(prevSelectedItems =>
-      prevSelectedItems.filter(selected => selected !== item)
-    );
+  const [favorites, setFavorites] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const response = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites');
+        setFavorites(response.data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFavorites();
+  }, []);
+
+  const handleDeleteItem = async (item) => {
+    try {
+      await axios.delete(`https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites/${item.id}`);
+      setFavorites(prevFavorites => prevFavorites.filter(favorite => favorite.id !== item.id));
+      setSelectedItems(prevSelectedItems =>
+        prevSelectedItems.filter(selected => selected.id !== item.id)
+      );
+    } catch (err) {
+      console.error('삭제 중 오류 발생:', err);
+      alert('맛집 삭제 중 오류가 발생했습니다.');
+    }
   };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="layout">
-      {/* 사이드바 추가 */}
       <div className="sidebar">
         <Link to="/" className="sidebar-button home-button">
           Home Page
@@ -24,9 +52,9 @@ const Favorite = ({ selectedItems, setSelectedItems }) => {
 
       <div className="main-content">
         <h1>내가 선택한 맛집</h1>
-        {selectedItems.length > 0 ? (
-          <div className="card-container">
-            {selectedItems.map((item, index) => (
+        {favorites.length > 0 ? (
+          <div className="container-favorite">
+            {favorites.map((item, index) => (
               <div className="card" key={index}>
                 <h2>{item.title}</h2>
                 <p><strong>주소:</strong> {item.address}</p>
@@ -38,7 +66,7 @@ const Favorite = ({ selectedItems, setSelectedItems }) => {
             ))}
           </div>
         ) : (
-          <p>선택된 맛집이 없습니다.</p>
+          <p>즐겨찾기가 없습니다.</p>
         )}
       </div>
     </div>

@@ -44,12 +44,6 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
-  .card-container {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  
   .card {
     display: flex;
     align-items: center;
@@ -60,6 +54,12 @@
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease;
+  }
+
+  .container-favorite {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
   }
   
   .card h2 {
