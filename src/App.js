@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import List from './pages/List';
 import Create from './pages/Create';
 import Favorite from './pages/Favorite';
+import Edit from './pages/Edit'; 
 
 function App() {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -21,6 +22,7 @@ function App() {
           path="/favorite"
           element={<Favorite selectedItems={selectedItems} setSelectedItems={setSelectedItems} />}
         />
+        <Route path="/edit/:id" element={<Edit />} />
       </Routes>
     </Router>
   );

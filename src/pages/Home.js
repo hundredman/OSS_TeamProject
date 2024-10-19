@@ -38,7 +38,7 @@ const Home = () => {
         </button>
       </div>
       <img
-        src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+        src="https://cdn.pixabay.com/photo/2018/05/21/12/37/restaurant-3418134_1280.png"
         alt="Google logo"
         className="google-logo"
       />
