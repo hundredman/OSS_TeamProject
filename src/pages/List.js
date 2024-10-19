@@ -129,7 +129,7 @@ const List = ({ selectedItems, setSelectedItems }) => {
     <div className="layout">
       <div className="sidebar">
         <Link to="/" className="sidebar-button home-button">Main Page</Link>
-        <Link to="/favorite" className="sidebar-button small-button">Go to List</Link>
+        <Link to="/favorite" className="sidebar-button small-button">Favorite</Link>
         <Link to="/create" className="sidebar-button large-button">음식점 추가</Link>
       </div>
 
