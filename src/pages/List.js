@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { syncData } from '../mockApiService';
+import { Card, Row, Col, Button } from 'react-bootstrap';
 import './List.css';
 
 const List = ({ selectedItems, setSelectedItems }) => {
@@ -10,15 +10,23 @@ const List = ({ selectedItems, setSelectedItems }) => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // 한 페이지에 표시할 항목 수
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://api.kcisa.kr/openapi/API_TOU_052/request?serviceKey=8b023383-2375-4dd2-a484-a4ad2cbcecb2&numOfRows=150&pageNo=1`
-        );
-        setData(response.data.response.body.items.item);
+        const mockResponse = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants');
+        
+        if (mockResponse.data.length === 0) {
+          const response = await axios.get(
+            `http://api.kcisa.kr/openapi/API_TOU_052/request?serviceKey=8b023383-2375-4dd2-a484-a4ad2cbcecb2&numOfRows=150&pageNo=1`
+          );
+          await syncData(response.data.response.body.items.item);
+          const newMockResponse = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants');
+          setData(newMockResponse.data);
+        } else {
+          setData(mockResponse.data);
+        }
       } catch (err) {
         setError(err);
       } finally {
@@ -29,7 +37,24 @@ const List = ({ selectedItems, setSelectedItems }) => {
     fetchData();
   }, []);
 
-  // 체크박스 선택 처리
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
+  const syncData = async (items) => {
+    try {
+      await Promise.all(items.map(item => 
+        axios.post('https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants', {
+          title: item.title,
+          address: item.address,
+          tel: item.tel,
+        })
+      ));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleCheckboxChange = (item) => {
     setSelectedItems(prevSelectedItems => {
       if (prevSelectedItems.includes(item)) {
@@ -40,28 +65,53 @@ const List = ({ selectedItems, setSelectedItems }) => {
     });
   };
 
-  // 항목 삭제 처리
-  const handleDeleteItem = (itemToDelete) => {
-    const updatedData = data.filter(item => item !== itemToDelete);
-    setData(updatedData);
-
-    setSelectedItems(prevSelectedItems =>
-      prevSelectedItems.filter(item => item !== itemToDelete)
-    );
-  };
-
-  // 리스트에 추가 처리
-  const handleAddToList = async () => {
+  const handleDeleteItem = async (itemToDelete) => {
     try {
-      await syncData(data); // MockAPI와 동기화
-      alert('리스트가 MockAPI에 성공적으로 추가되었습니다.');
+      await axios.delete(`https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants/${itemToDelete.id}`);
+      const updatedData = data.filter(item => item.id !== itemToDelete.id);
+      setData(updatedData);
+      setSelectedItems(prevSelectedItems =>
+        prevSelectedItems.filter(item => item.id !== itemToDelete.id)
+      );
     } catch (err) {
-      alert('리스트 추가 중 오류가 발생했습니다.');
       console.error(err);
     }
   };
 
-  // 페이지 변경 핸들러
+  const handleAddToFavorites = async () => {
+    if (selectedItems.length > 0) {
+      try {
+        const favoritesResponse = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites');
+        const existingFavorites = favoritesResponse.data;
+
+        const hasDuplicates = selectedItems.some(item => 
+          existingFavorites.some(favorite => 
+            favorite.title === item.title && favorite.address === item.address
+          )
+        );
+
+        if (hasDuplicates) {
+          alert('선택한 목록에 이미 즐겨찾기에 추가된 맛집이 있습니다. 추가할 수 없습니다.');
+          return; 
+        }
+
+        await Promise.all(selectedItems.map(async (item) => {
+          await axios.post('https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites', {
+            title: item.title,
+            address: item.address,
+            tel: item.tel,
+          });
+        }));
+
+        alert('선택한 맛집이 즐겨찾기에 추가되었습니다.');
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      alert('선택된 맛집이 없습니다.');
+    }
+  };
+
   const handlePageChange = (direction) => {
     setCurrentPage(prevPage => {
       if (direction === 'next') {
@@ -73,15 +123,14 @@ const List = ({ selectedItems, setSelectedItems }) => {
     });
   };
 
+  // 로딩 중이거나 오류가 발생한 경우 반환
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
-  // 필터링된 데이터
   const filteredData = data.filter(item =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // 현재 페이지의 데이터 가져오기
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
@@ -89,18 +138,18 @@ const List = ({ selectedItems, setSelectedItems }) => {
   return (
     <div className="layout">
       <div className="sidebar">
-        <Link to="/" className="sidebar-button home-button">Main Page</Link>
-        <Link to="/create" className="sidebar-button large-button">음식점 추가</Link> {/* 새로운 버튼 추가 */}
-        <Link to="/favorite" className="sidebar-button small-button">Go to List</Link>
+        <Link to="/" className="sidebar-button home-button">Home Page</Link>
+        <Link to="/favorite" className="sidebar-button small-button">Favorite</Link>
+        <Link to="/create" className="sidebar-button large-button">음식점 추가</Link>
       </div>
 
       <div className="main-content">
         <h1>맛집 리스트</h1>
 
         <div className="search-add-container">
-          <button className="add-to-favorite-button" onClick={handleAddToList}>
-            리스트에 추가
-          </button>
+          <Button className="add-to-favorite-button" onClick={handleAddToFavorites}>
+            즐겨찾기에 추가
+          </Button>
 
           <input
             type="text"
@@ -110,52 +159,60 @@ const List = ({ selectedItems, setSelectedItems }) => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
 
-          {/* 페이지네이션 버튼 */}
           <div className="pagination">
-            <button
+            <Button
               className="page-button"
               onClick={() => handlePageChange('prev')}
               disabled={currentPage === 1}
             >
               {'<'}
-            </button>
-            <button
+            </Button>
+            <Button
               className="page-button"
               onClick={() => handlePageChange('next')}
               disabled={currentPage * itemsPerPage >= filteredData.length}
             >
               {'>'}
-            </button>
+            </Button>
           </div>
         </div>
 
-        {/* 현재 페이지 정보 표시 */}
         <div className="pagination-info">
           {`Showing ${indexOfFirstItem + 1}-${Math.min(indexOfLastItem, filteredData.length)} of ${filteredData.length}`}
         </div>
 
-        <div className="card-container" style={{ marginTop: '20px' }}>
+        <Row className="card-container" style={{ marginTop: '20px' }}>
           {currentItems.length > 0 ? (
             currentItems.map((item, index) => (
-              <div className="card" key={index}>
-                <input
-                  type="checkbox"
-                  className="card-checkbox"
-                  onChange={() => handleCheckboxChange(item)}
-                  checked={selectedItems.includes(item)}
-                />
-                <h2>{item.title}</h2>
-                <p><strong>주소:</strong> {item.address}</p>
-                <p><strong>전화번호:</strong> {item.tel}</p>
-                <button className="delete-button" onClick={() => handleDeleteItem(item)}>
-                  삭제
-                </button>
-              </div>
+              <Col key={index} md={12}>
+                <Card className="restaurant-card">
+                  <Card.Body className="card-body">
+                    <div className="card-content">
+                      <input
+                        type="checkbox"
+                        className="card-checkbox"
+                        onChange={() => handleCheckboxChange(item)}
+                        checked={selectedItems.includes(item)}
+                      />
+                      <div>
+                        <Card.Title className="card-title">{item.title}</Card.Title>
+                        <Card.Text className="card-text">
+                          <strong>주소:</strong> {item.address} <br />
+                          <strong>전화번호:</strong> {item.tel}
+                        </Card.Text>
+                      </div>
+                    </div>
+                    <Button className="delete-button" onClick={() => handleDeleteItem(item)}>
+                      삭제
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </Col>
             ))
           ) : (
             <p>검색 결과가 없습니다.</p>
           )}
-        </div>
+        </Row>
       </div>
     </div>
   );
