@@ -37,6 +37,10 @@ const List = ({ selectedItems, setSelectedItems }) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
   const syncData = async (items) => {
     try {
       await Promise.all(items.map(item => 
@@ -63,16 +67,12 @@ const List = ({ selectedItems, setSelectedItems }) => {
 
   const handleDeleteItem = async (itemToDelete) => {
     try {
-      // API에서 해당 항목 삭제
       await axios.delete(`https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants/${itemToDelete.id}`);
-      
-      // 로컬 상태에서 삭제
       const updatedData = data.filter(item => item.id !== itemToDelete.id);
       setData(updatedData);
       setSelectedItems(prevSelectedItems =>
         prevSelectedItems.filter(item => item.id !== itemToDelete.id)
       );
-  
     } catch (err) {
       console.error(err);
     }
@@ -83,18 +83,18 @@ const List = ({ selectedItems, setSelectedItems }) => {
       try {
         const favoritesResponse = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites');
         const existingFavorites = favoritesResponse.data;
-  
+
         const hasDuplicates = selectedItems.some(item => 
           existingFavorites.some(favorite => 
             favorite.title === item.title && favorite.address === item.address
           )
         );
-  
+
         if (hasDuplicates) {
           alert('선택한 목록에 이미 즐겨찾기에 추가된 맛집이 있습니다. 추가할 수 없습니다.');
-          return; // 중복이 있을 경우 추가하지 않음
+          return; 
         }
-  
+
         await Promise.all(selectedItems.map(async (item) => {
           await axios.post('https://67123da04eca2acdb5f7bcce.mockapi.io/api/favorites', {
             title: item.title,
@@ -102,7 +102,7 @@ const List = ({ selectedItems, setSelectedItems }) => {
             tel: item.tel,
           });
         }));
-  
+
         alert('선택한 맛집이 즐겨찾기에 추가되었습니다.');
       } catch (err) {
         console.error(err);
@@ -111,7 +111,7 @@ const List = ({ selectedItems, setSelectedItems }) => {
       alert('선택된 맛집이 없습니다.');
     }
   };
-   
+
   const handlePageChange = (direction) => {
     setCurrentPage(prevPage => {
       if (direction === 'next') {
@@ -123,6 +123,7 @@ const List = ({ selectedItems, setSelectedItems }) => {
     });
   };
 
+  // 로딩 중이거나 오류가 발생한 경우 반환
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
