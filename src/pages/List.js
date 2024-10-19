@@ -23,11 +23,11 @@ const List = ({ selectedItems, setSelectedItems }) => {
           const response = await axios.get(
             `http://api.kcisa.kr/openapi/API_TOU_052/request?serviceKey=8b023383-2375-4dd2-a484-a4ad2cbcecb2&numOfRows=80&pageNo=1`
           );
-  
+
           // 새로운 데이터를 가져온 후 Mock API에 동기화하고 바로 setData 처리
           const newItems = response.data.response.body.items.item;
           await syncData(newItems);
-  
+
           // 새로운 데이터를 setData로 업데이트 (다시 GET 요청 안 함)
           setData(newItems);
         } else {
@@ -40,7 +40,7 @@ const List = ({ selectedItems, setSelectedItems }) => {
         setLoading(false);
       }
     };
-  
+
     fetchData();
   }, []);
 
@@ -52,16 +52,16 @@ const List = ({ selectedItems, setSelectedItems }) => {
     try {
       const existingDataResponse = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants');
       const existingData = existingDataResponse.data;
-  
+
       // 중복된 항목을 걸러낸 후에만 새로운 데이터를 post
       const filteredItems = items.filter(item =>
         !existingData.some(existingItem =>
           existingItem.title === item.title && existingItem.address === item.address
         )
       );
-  
+
       // 중복되지 않은 데이터만 Mock API에 저장
-      await Promise.all(filteredItems.map(item => 
+      await Promise.all(filteredItems.map(item =>
         axios.post('https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants', {
           title: item.title,
           address: item.address,
@@ -94,6 +94,10 @@ const List = ({ selectedItems, setSelectedItems }) => {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const handleUpdateItem = (item) => {
+    navigate(`/edit/${item.id}`, { state: { item } });
   };
 
   const handleAddToFavorites = async () => {
@@ -152,10 +156,6 @@ const List = ({ selectedItems, setSelectedItems }) => {
   const filteredData = data.filter(item =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const handleCardClick = (id) => {
-    navigate(`/edit/${id}`);
-  }
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -232,8 +232,11 @@ const List = ({ selectedItems, setSelectedItems }) => {
                         </Card.Text>
                       </div>
                     </div>
-                    <Button className="delete-button" onClick={(e) => {handleDeleteItem(item);}}>
+                    <Button className="delete-button" onClick={(e) => { handleDeleteItem(item); }}>
                       삭제
+                    </Button>
+                    <Button className="update-button" onClick={() => handleUpdateItem(item)}>
+                      수정
                     </Button>
                   </Card.Body>
                 </Card>
