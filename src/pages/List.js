@@ -15,16 +15,23 @@ const List = ({ selectedItems, setSelectedItems }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Mock API에서 데이터를 먼저 가져옴
         const mockResponse = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants');
-        
+  
+        // Mock API에 데이터가 없는 경우에만 새로운 데이터를 API에서 가져옴
         if (mockResponse.data.length === 0) {
           const response = await axios.get(
-            `http://api.kcisa.kr/openapi/API_TOU_052/request?serviceKey=8b023383-2375-4dd2-a484-a4ad2cbcecb2&numOfRows=150&pageNo=1`
+            `http://api.kcisa.kr/openapi/API_TOU_052/request?serviceKey=8b023383-2375-4dd2-a484-a4ad2cbcecb2&numOfRows=30&pageNo=1`
           );
-          await syncData(response.data.response.body.items.item);
-          const newMockResponse = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants');
-          setData(newMockResponse.data);
+  
+          // 새로운 데이터를 가져온 후 Mock API에 동기화하고 바로 setData 처리
+          const newItems = response.data.response.body.items.item;
+          await syncData(newItems);
+  
+          // 새로운 데이터를 setData로 업데이트 (다시 GET 요청 안 함)
+          setData(newItems);
         } else {
+          // 데이터가 있을 경우 바로 상태 업데이트
           setData(mockResponse.data);
         }
       } catch (err) {
@@ -33,7 +40,7 @@ const List = ({ selectedItems, setSelectedItems }) => {
         setLoading(false);
       }
     };
-
+  
     fetchData();
   }, []);
 
@@ -43,7 +50,18 @@ const List = ({ selectedItems, setSelectedItems }) => {
 
   const syncData = async (items) => {
     try {
-      await Promise.all(items.map(item => 
+      const existingDataResponse = await axios.get('https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants');
+      const existingData = existingDataResponse.data;
+  
+      // 중복된 항목을 걸러낸 후에만 새로운 데이터를 post
+      const filteredItems = items.filter(item =>
+        !existingData.some(existingItem =>
+          existingItem.title === item.title && existingItem.address === item.address
+        )
+      );
+  
+      // 중복되지 않은 데이터만 Mock API에 저장
+      await Promise.all(filteredItems.map(item => 
         axios.post('https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants', {
           title: item.title,
           address: item.address,
