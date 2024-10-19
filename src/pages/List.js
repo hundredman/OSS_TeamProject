@@ -61,12 +61,21 @@ const List = ({ selectedItems, setSelectedItems }) => {
     });
   };
 
-  const handleDeleteItem = (itemToDelete) => {
-    const updatedData = data.filter(item => item !== itemToDelete);
-    setData(updatedData);
-    setSelectedItems(prevSelectedItems =>
-      prevSelectedItems.filter(item => item !== itemToDelete)
-    );
+  const handleDeleteItem = async (itemToDelete) => {
+    try {
+      // API에서 해당 항목 삭제
+      await axios.delete(`https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants/${itemToDelete.id}`);
+      
+      // 로컬 상태에서 삭제
+      const updatedData = data.filter(item => item.id !== itemToDelete.id);
+      setData(updatedData);
+      setSelectedItems(prevSelectedItems =>
+        prevSelectedItems.filter(item => item.id !== itemToDelete.id)
+      );
+  
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleAddToFavorites = async () => {

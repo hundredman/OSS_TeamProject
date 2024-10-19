@@ -10,12 +10,18 @@ const Create = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
+    const newRestaurant = {
+      createdAt: new Date().toISOString(), // 현재 시간의 ISO 문자열
+      name: '', // 이름은 비워둠
+      avatar: '', // 아바타는 비워둠
+      id: '', // ID는 비워둠 (서버에서 자동 생성되도록 할 수 있음)
+      title: data.title,
+      address: data.address,
+      tel: data.tel,
+    };
+
     try {
-      const response = await axios.post('https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants', {
-        title: data.title,
-        address: data.address,
-        tel: data.tel,
-      });
+      const response = await axios.post('https://67123da04eca2acdb5f7bcce.mockapi.io/api/restaurants', newRestaurant);
 
       // 요청 성공 시 상태 코드 확인
       if (response.status === 201) {
